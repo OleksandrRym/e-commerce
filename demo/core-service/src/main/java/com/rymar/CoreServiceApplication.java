@@ -1,12 +1,12 @@
-package com.rymar.dao;
+package com.rymar;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DaoApplication {
+public class CoreServiceApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(DaoApplication.class, args);
+    SpringApplication.run(CoreServiceApplication.class, args);
   }
 }

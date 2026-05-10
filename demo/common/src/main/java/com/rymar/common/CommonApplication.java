@@ -1,12 +1,12 @@
-package com.rymar.coreservice;
+package com.rymar.common;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CoreServiceApplication {
+public class CommonApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(CoreServiceApplication.class, args);
+    SpringApplication.run(CommonApplication.class, args);
   }
 }

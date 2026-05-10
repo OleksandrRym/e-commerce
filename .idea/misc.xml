@@ -10,11 +10,14 @@
         <option value="$PROJECT_DIR$/demo/pom.xml" />
         <option value="$PROJECT_DIR$/demo/dao/pom.xml" />
         <option value="$PROJECT_DIR$/demo/core-service/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/events/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/common/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/beckend/pom.xml" />
+        <option value="$PROJECT_DIR$/demo/events/pom.xml" />
       </set>
     </option>
   </component>

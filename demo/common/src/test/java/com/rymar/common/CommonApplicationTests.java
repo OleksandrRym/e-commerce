@@ -1,10 +1,10 @@
-package com.rymar.coreservice;
+package com.rymar.common;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CoreServiceApplicationTests {
+class CommonApplicationTests {
 
   @Test
   void contextLoads() {}
