@@ -35,8 +35,10 @@ services:
 
   dao-service:
     build:
-      context: ./demo/dao
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile # шлях до універсального Dockerfile
+      args:
+        MODULE_NAME: dao
     container_name: dao_service
     ports:
       - "8081:8081"
@@ -51,8 +53,10 @@ services:
 
   core-service:
     build:
-      context: ./demo/core-service
+      context: .
       dockerfile: Dockerfile
+      args:
+        MODULE_NAME: core-service
     container_name: core_service
     ports:
       - "8080:8080"
@@ -65,15 +69,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: password
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
 
-  common:
-    build:
-      context: ./demo/common
-      dockerfile: Dockerfile
-    container_name: common_service
-    ports:
-      - "9080:9080"
-    depends_on:
-      - kafka
+# Сервіс common ВИДАЛЕНО
 
 volumes:
   pgdata:

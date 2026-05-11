@@ -1,5 +1,7 @@
 package com.rymar.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
@@ -12,25 +14,17 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Configuration
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    // Створення топіка при старті додатку
     @Bean
     public NewTopic mainTopic() {
-        return TopicBuilder.name("orymar-events")
-                .partitions(3)
-                .replicas(1)
-                .build();
+    return TopicBuilder.name("create-product-events").partitions(3).replicas(1).build();
     }
 
-    // Налаштування KafkaTemplate (Sender)
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
         Map<String, Object> configProps = new HashMap<>();

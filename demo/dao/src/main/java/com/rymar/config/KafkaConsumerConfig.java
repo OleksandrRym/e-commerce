@@ -27,14 +27,10 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "orymar-group");
-
-        // Використовуємо ErrorHandlingDeserializer, щоб уникнути "dead loops" при помилках десеріалізації
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-
-        // Налаштування довірених пакетів для десеріалізатора (важливо для безпеки JSON)
         JsonDeserializer<Object> jsonDeserializer = new JsonDeserializer<>();
-        jsonDeserializer.addTrustedPackages("*"); // Дозволяємо всі пакети або вкажіть конкретний, наприклад "com.rymar.*"
+        jsonDeserializer.addTrustedPackages("*");
 
         return new DefaultKafkaConsumerFactory<>(
                 props,

@@ -1,25 +1,38 @@
 package com.rymar.listener;
 
-import java.util.Map;
+import com.rymar.common.events.CreateProductEvent;
+import com.rymar.entity.Product;
+import com.rymar.repo.spring.ProductRepo;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class KafkaListenerService {
 
+  private final ProductRepo productRepo;
+
   @KafkaListener(
-      topics = "orymar-events",
+      topics = "create-product-events",
       groupId = "orymar-group",
       containerFactory = "kafkaListenerContainerFactory")
-  public void listen(Map<String, Object> message) {
-    log.info("Received message in Listener: {}", message);
+  public void listen(Object event) {
+    if (event instanceof CreateProductEvent) {
+      saveProduct((CreateProductEvent) event);
+    }
+  }
 
-    // Приклад обробки даних
-    String name = (String) message.get("name");
-    Integer age = (Integer) message.get("age");
+  private void saveProduct(CreateProductEvent event) {
+      var obj = event.createProductDto;
+      var product = new Product();
+      product.name = obj.name();
+      product.price = obj.price();
+      product.count = obj.count();
 
-    log.info("Extracted data: Name = {}, Age = {}", name, age);
+      productRepo.save(product);
+      log.info(product.toString());
   }
 }
