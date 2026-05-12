@@ -15,7 +15,6 @@ public class KafkaSender {
     public void sendMessage(String topic, Object message) {
         log.info("Sending message to Kafka: {}", message);
 
-        // Використовуємо CompletableFuture для обробки результату відправки
         kafkaTemplate.send(topic, message)
                 .whenComplete((result, ex) -> {
                     if (ex == null) {

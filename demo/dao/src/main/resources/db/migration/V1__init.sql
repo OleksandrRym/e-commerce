@@ -1,4 +1,3 @@
--- Таблиця продуктів
 CREATE TABLE products (
                           id UUID PRIMARY KEY,
                           name VARCHAR(255) NOT NULL,
@@ -6,13 +5,11 @@ CREATE TABLE products (
                           count INT NOT NULL DEFAULT 0
 );
 
--- Таблиця кошиків
 CREATE TABLE carts (
                        id UUID PRIMARY KEY,
                        processed BOOLEAN DEFAULT FALSE
 );
 
--- Таблиця користувачів
 CREATE TABLE users (
                        uuid UUID PRIMARY KEY,
                        username VARCHAR(255),
@@ -21,7 +18,6 @@ CREATE TABLE users (
                        CONSTRAINT fk_user_cart FOREIGN KEY (cart_id) REFERENCES carts(id)
 );
 
--- Проміжна таблиця для зв'язку Cart <-> Product (Many-to-Many)
 CREATE TABLE cart_products (
                                cart_id UUID NOT NULL,
                                product_id UUID NOT NULL,

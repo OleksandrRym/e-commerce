@@ -2,6 +2,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate  # Тепер таблиці створює ТІЛЬКИ Flyway
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/orymar_db}
     username: ${SPRING_DATASOURCE_USERNAME:user}
@@ -9,6 +12,7 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    fail-on-missing-locations: true
     locations: classpath:db/migration
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
@@ -16,12 +20,13 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: orymar-group
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      # Вказуємо, що значення повідомлення — це JSON
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.rymar.*"
+        # Дозволяємо десеріалізацію класів з вашого спільного модуля
+        spring.json.trusted.packages: "com.rymar.common.events"
+        # (Опціонально) Якщо ви хочете чітко вказати тип
+        spring.json.value.default.type: "com.rymar.common.events.CreateProductEvent"
 
 server:
   port: 8081

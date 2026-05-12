@@ -38,7 +38,6 @@ public class KafkaConsumerConfig {
                 new ErrorHandlingDeserializer<>(jsonDeserializer)
         );
     }
-
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, Object> kafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Object> factory =

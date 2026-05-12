@@ -1,10 +1,11 @@
 package com.rymar.listener;
 
 import com.rymar.common.events.CreateProductEvent;
-import com.rymar.entity.Product;
-import com.rymar.repo.spring.ProductRepo;
+import com.rymar.mapper.ProductMapper;
+import com.rymar.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -13,26 +14,24 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class KafkaListenerService {
 
-  private final ProductRepo productRepo;
+  private final ProductService productService;
+  private final ProductMapper productMapper;
 
   @KafkaListener(
-      topics = "create-product-events",
+      topics = "create-product-event",
       groupId = "orymar-group",
       containerFactory = "kafkaListenerContainerFactory")
-  public void listen(Object event) {
-    if (event instanceof CreateProductEvent) {
-      saveProduct((CreateProductEvent) event);
-    }
+  public void listen(ConsumerRecord<String, CreateProductEvent> record) {
+    CreateProductEvent event = record.value();
+    saveProduct(event);
   }
 
   private void saveProduct(CreateProductEvent event) {
-      var obj = event.createProductDto;
-      var product = new Product();
-      product.name = obj.name();
-      product.price = obj.price();
-      product.count = obj.count();
-
-      productRepo.save(product);
-      log.info(product.toString());
+    var obj = event.createProductDto;
+    log.info(obj.toString());
+    var product = productMapper.dtoToObject(obj);
+    log.info(product.toString());
+    productService.saveProduct(product);
+    log.info("Product save to db: {}", product);
   }
 }
