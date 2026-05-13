@@ -22,7 +22,10 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic mainTopic() {
-    return TopicBuilder.name("create-product-events").partitions(3).replicas(1).build();
+    return TopicBuilder.name("product-events")
+            .partitions(3)
+            .replicas(1)
+            .build();
     }
 
     @Bean
@@ -30,7 +33,7 @@ public class KafkaConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class); // Для JSON об'єктів
+        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         return new DefaultKafkaProducerFactory<>(configProps);
     }
 

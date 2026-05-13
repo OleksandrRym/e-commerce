@@ -1,6 +1,7 @@
 package com.rymar.listener;
 
 import com.rymar.common.events.CreateProductEvent;
+import com.rymar.common.events.UpdateProductEvent;
 import com.rymar.mapper.ProductMapper;
 import com.rymar.service.ProductService;
 import lombok.RequiredArgsConstructor;
@@ -18,19 +19,26 @@ public class KafkaListenerService {
   private final ProductMapper productMapper;
 
   @KafkaListener(
-      topics = "create-product-event",
+      topics = "product-events",
       groupId = "orymar-group",
       containerFactory = "kafkaListenerContainerFactory")
-  public void listen(ConsumerRecord<String, CreateProductEvent> record) {
-    CreateProductEvent event = record.value();
-    saveProduct(event);
+  public void listen(ConsumerRecord<String, Object> record) {
+      switch (record.value()){
+          case CreateProductEvent createProductEvent -> saveProduct(createProductEvent);
+          case UpdateProductEvent updateProductEvent -> updateProduct(updateProductEvent);
+          default -> throw new IllegalStateException("Unexpected value: " + record.value());
+      }
+
   }
 
+    private void updateProduct(UpdateProductEvent event) {
+        var product = productMapper.updateProductDtoToObject(event.updateProductDto);
+        productService.saveProduct(product);
+        log.info("Product save to db: {}", product);
+    }
+
   private void saveProduct(CreateProductEvent event) {
-    var obj = event.createProductDto;
-    log.info(obj.toString());
-    var product = productMapper.dtoToObject(obj);
-    log.info(product.toString());
+    var product = productMapper.createProductDtoToObject(event.createProductDto);
     productService.saveProduct(product);
     log.info("Product save to db: {}", product);
   }
